@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" type="text/css" href="pong.css" />
+    <head>
+        <title>Pong</title>
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    </head>
+    <body>
+
+        <div id="field" class="field" onclick="start()">
+            <div id="computer" class="player right"></div>
+            <div id="user" class="player left"></div>
+            <div id="ball" class="ball right"></div>
+        </div>
+        <div class="points" id="points">
+            <div class="puser" id="puser">YOU:<br>0</div>
+            <div class="ppc" id="ppc">PC:<br>0</div>
+        </div>
+        <script>
+        var pcs = 0.5;
+         function pcspeed(){
+         pcs = (parseFloat(prompt("Speed of the virtual PC player (0-9)")))/3;
+         if((pcs < 0) || (pcs >3)){
+         alert("Type in a Number of 0-9!")
+         pcspeed();
+        }
+        }
+         pcspeed();
+        //mouse Coord.
+        var X;
+        var Y;
+        //vector Coords
+        var x=-0.5;
+        var y=0;
+        
+        var by = 48;
+        var bx = 98;
+        var pc = 43;
+        var pcactive = false;
+        var pcwant = 43;
+        var start = true;
+        var ppc = 0;
+        var puser = 0;
+        function screenset(){
+        //section is setting the field and makes screen rotation for mobile devices posible
+        var maxX = window.innerHeight;
+        var maxY = window.innerWidth;
+
+
+        if (maxX > maxY){
+
+        //screen has more height than width
+        //set the field
+        document.getElementById("field").style.width = maxY+"px";
+        document.getElementById("field").style.height = maxY+"px";
+        //set position of "Points" Field
+        document.getElementById("points").style.left = "0px";
+        document.getElementById("points").style.top = maxY+"px";
+        //Set deminsion of "Points" Field
+        document.getElementById("points").style.width = (maxY).toString()+"px";
+        document.getElementById("points").style.height = (maxY-maxX).toString()+"px";
+
+        }else{
+        //screen has more width than height
+        //set the field
+        document.getElementById("field").style.height = maxX+"px";
+        document.getElementById("field").style.width = maxX+"px";
+        //set position of "Points" Field
+        document.getElementById("points").style.left = maxX+"px";
+        document.getElementById("points").style.top = "0px";
+        //Set deminsion of "Points" Field (!!!)
+        document.getElementById("points").style.width = (maxY-maxX).toString()+"px";
+        document.getElementById("points").style.height = (maxX).toString()+"px";
+        }
+        }
+screenset()
+        var maxX = window.screen.height;
+        var maxY = window.screen.width;
+function precalc(){
+//calculates the position where the (virtual) PC Player should move
+var hypoby = by;
+var hypobx = bx;
+var hypox = x;
+var hypoy = y;
+while(hypobx < 98){
+        if((by+y < 100) || (by+y > 0)){
+        hypoby = hypoby +hypoy
+        hypobx = hypobx+x
+        if((hypoby < 1)||(hypoby > 99)){
+        
+        //ball gains an edge
+        hypoy = hypoy*-1
+        //hypox = (1/hypox)*0.5
+
+        }
+}
+}
+pcwant = hypoby-7.5;
+pcactive = true;
+
+}
+        window.setInterval(function (){
+screenset();
+        
+        
+        if(start == true){
+        if(pcactive == true){
+        //if pc user is in action
+        //following prevents that pc user is wiggling
+        if(Math.abs(pcwant-pc) < 2){
+        pcactive = false;
+        }
+        if(bx >98){
+        }
+        if ((pc < 99) || (pc > 1)){
+        //Fallback to prevent PC Player from moving outside the field
+        if(pcwant > pc){
+        pc = pc+pcs;
+        }else{
+        pc = pc-pcs;
+        }
+        }
+        }
+        //set pc player and ball positions
+        document.getElementById("computer").style.top = pc.toString()+"%";
+        document.getElementById("ball").style.top = by.toString()+"%";
+        document.getElementById("ball").style.left = bx.toString()+"%";
+        if((by+y < 100) || (by+y > 0)){
+        //new position calculated by the vector coords
+        //if couse is a Fallback to prevent the ball from leaving the field.
+        by = by +y
+        bx = bx+x
+        }
+        if((by < 1)||(by > 99)){
+        
+        //ball gains an edge
+        y = y*-1
+        //x = (1/x)*0.5
+
+        }
+        if(bx < 2){
+        //gains the edge, at the side of player
+        if((Y-by < 9.5) && (by-Y < 9.5)){
+        
+        //player doesn't fail => 9.5 because of the half the length of player's gedit (7.5) + the length of the ball (2)
+
+       
+        y = y+(by-Y)/15
+        x=x*-1.05
+        //start calculation, where the PC player should go.
+        precalc()
+        }else{
+        //player does fail
+        ppc++
+        if(ppc == 10){
+        alert("You lost the Game.")
+        start = false;
+        }else{
+        x = 1;
+        y = 0;
+        bx = 2
+        by = Y;
+        pc = by;
+        document.getElementById("ppc").innerHTML = "PC:<br>"+ppc.toString();
+        precalc()
+        }
+        }
+        }
+        if(bx > 98){
+        //gains the edge, at the side of PCplayer
+        pcactive = false;
+
+        if(((pc+7.5)-by < 9.5) && (by-(pc+7.5) < 9.5)){
+        
+        //player doesn't fail => 9.5 because of the half the length of PCplayer's gedit (7.5) + the length of the ball (2)
+
+       
+        y = y+(by-(pc+7.5))/15
+        x=x*-1.05
+
+        }else{
+        //PCplayer does fail
+        puser++
+        if(puser == 10){
+        alert("The PC lost the game.")
+        start = false;
+        }else{
+        x = 1;
+        y = 0;
+        bx = 97.5
+        by = pc+7.5
+        document.getElementById("puser").innerHTML = "YOU:<br>"+puser.toString();
+        }
+        }
+        }
+        
+        }
+document.onmousemove = function(e) {
+//calculate and set player position
+    var Yalt = Y;
+    X = e.pageX || event.clientX + document.body.scrollLeft;
+    Y = e.pageY || event.clientY + document.body.scrollTop;
+    Y = ((Y)/maxY)*100
+    if((Y < 0) || (Y > 100)){
+    //Prevents Player from moving outside the field.
+    Y = Yalt;
+    }
+
+    document.getElementById("user").style.top = Y-7.5+"%";
+    
+
+}
+        document.getElementById("field").onclick = function (){
+        //  alert("test")
+//         document.getElementById("computer").style.top = pc.toString()+"%";
+//         document.getElementById("ball").style.top = by.toString()+"%";
+//         document.getElementById("ball").style.top = bx.toString()+"%";
+// start = true;
+
+
+}
+        },30);
+
+        </script>
+    </body>
+</html>

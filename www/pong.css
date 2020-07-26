@@ -1,0 +1,51 @@
+div.field{
+
+    background-color:green;
+    position:absolute;
+    top:0%;
+    left:0px;
+}
+
+div.ball{
+
+    background-color:white;
+    position:absolute;
+    overflow: visible;
+    width:2%;
+    padding-bottom:2%;
+}
+div.player{
+
+    background-color:black;
+    position:absolute;
+    overflow: visible;
+    width:2%;
+    padding-bottom:15%;
+    
+
+}
+.left{
+    left:0%;
+    top:0%;
+    
+}
+.right{
+
+    left:98%;
+    top:0%;
+}
+div.points{
+    position:absolute;
+
+
+}
+.ppc{
+    position:absolute;
+    left:80%;
+    top:10%;
+}
+.puser{
+    position:absolute;
+    left:10%;
+    top:10%;
+}
