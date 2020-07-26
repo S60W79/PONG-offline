@@ -101,6 +101,22 @@ pcwant = hypoby-7.5;
 pcactive = true;
 
 }
+function star(){
+        alert("admit to continue")
+        //vector Coords
+       x=-0.5;
+         y=0;
+         
+         by = 48;
+         bx = 98;
+         pc = 43;
+         pcactive = false;
+         pcwant = 43;
+         start = true;
+         ppc = 0;
+         puser = 0;
+         pcspeed();
+}
         window.setInterval(function (){
 screenset();
         
@@ -157,8 +173,9 @@ screenset();
         if(ppc == 10){
         alert("You lost the Game.")
         start = false;
+        star()
         }else{
-        x = 1;
+        x = 0.5;
         y = 0;
         bx = 2
         by = Y;
@@ -186,8 +203,9 @@ screenset();
         if(puser == 10){
         alert("The PC lost the game.")
         start = false;
+        star();
         }else{
-        x = 1;
+        x = -0.5;
         y = 0;
         bx = 97.5
         by = pc+7.5
